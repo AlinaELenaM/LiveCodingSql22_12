@@ -5,8 +5,21 @@ import java.sql.Statement;
 
 public class Menu {
     final String url = "jdbc:mysql://localhost:3306/newdb";
-    final String user = "developer";
-    final String password = "passwordhere";
+    final String user = "root";
+    final String password = "Hulkhugan92!";
+
+    private Integer menuId;
+
+    private String name;
+
+    private String type;
+
+    public Menu (Integer menuId, String name, String type) {
+        this.menuId = menuId;
+        this.name = name;
+        this.type = type;
+    };
+
 
     public void createTableMenu() throws SQLException {
 
@@ -23,4 +36,18 @@ public class Menu {
         System.out.println("Table Menu created!");
         statement.close();
     }
+
+    public void insertIntoTable () throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        String insertQuery =
+                """ 
+                 INSERT INTO menu (name, tipo)
+                 VALUES ('""" + this.name + "', '" + this.type + "');";
+        statement.executeUpdate(insertQuery);
+        System.out.println("Insert fields name and type!");
+        statement.close();
+    }
+
+
 }

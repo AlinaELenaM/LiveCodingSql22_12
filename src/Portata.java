@@ -1,12 +1,9 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Portata {
     final String url = "jdbc:mysql://localhost:3306/newdb";
-    final String user = "developer";
-    final String password = "passwordhere";
+    final String user = "root";
+    final String password = "Hulkhugan92!";
     private String name;
     private Integer price;
     private Integer portataId;
@@ -71,5 +68,47 @@ public class Portata {
 
         System.out.println("Alter table done!");
         statement.close();
+    }
+
+    public void insertIntoTable () throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        String insertQuery =
+                """ 
+                 INSERT INTO portata (name, price)
+                 VALUES ('""" + this.name + "', '" + this.price + "');";
+        statement.executeUpdate(insertQuery);
+        System.out.println("Insert fields name and type!");
+        statement.close();
+    }
+
+
+   public void genericAlterTable (String query) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        String formattedQuery = "" + query + "";
+        statement.executeUpdate(formattedQuery);
+        System.out.println("Altered table");
+        statement.close();
+    }
+
+    public void addPortataIntoMenu (String menuName) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+
+        int menu_id =0;
+        String selectMenu = "SELECT menu_id FROM menu WHERE name='" +menuName +"';";
+        ResultSet result = statement.executeQuery(selectMenu);
+        while (result.next()) {
+            menu_id = result.getInt("menu_id");
+        }
+
+       // String selectPortata = "SELECT menu_id FROM portata WHERE portata_id= " + this.portataId;
+
+
+        String addMenuIntoPortata = "UPDATE portata SET menu_id = " +  menu_id + " WHERE portata_id=" +this.portataId +";";
+        statement.executeUpdate(addMenuIntoPortata);
+        System.out.println("YEEEEEE");
+        connection.close();
     }
 }
